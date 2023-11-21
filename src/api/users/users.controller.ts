@@ -4,7 +4,8 @@ import {
   login,
 } from "./users.service";
 import { handleError } from "../../utils/handleErrors";
-import registerValidation from "./registerValidation";
+
+import registerValidation from "./registerValidation"
 import loginValidation from "./loginValidation";
 import { Request, Response } from "express";
 import { generateAuthToken } from "../middleWare/Provider/jwt";
@@ -37,8 +38,8 @@ export const handleLogin = async (req: Request, res: Response) => {
     //   //sameSite: 'strict', // Controls when cookies are sent in cross-origin requests
     //   maxAge: 24 * 60 * 60 * 1000, // Expiry time of the cookie in milliseconds (24 hours in this case)
     // });
-    res.header("access_token", token)
-    res.status(200).json({message: 'Token sent successfully'});
+    //res.header("access_token", token)
+    res.status(200).json({access_token: token});
   } catch (error) {
     handleError(res, error, 401);
   }

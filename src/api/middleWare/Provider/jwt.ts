@@ -6,9 +6,11 @@ export interface tokenDataInterface{
     email: string;
     isAdmin: boolean;
 }
+
+const expirationTime = '1h'
 export const generateAuthToken = (user:tokenDataInterface) => {
     const {email, isAdmin} = user
-    const token = jwt.sign({email, isAdmin}, key)
+    const token = jwt.sign({email, isAdmin}, key, { expiresIn: expirationTime })
     return token
 }
 
