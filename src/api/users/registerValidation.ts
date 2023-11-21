@@ -1,7 +1,8 @@
 import Joi from "joi";
 import UserInterface from "./UserInterface";
 
-const userValidation = (user: UserInterface) => {
+const registerValidation = (user: UserInterface) => {
+  console.log('enter to register validation');
   const schema = Joi.object({
     _id: Joi.string().allow(""),
     email: Joi.string()
@@ -24,12 +25,9 @@ const userValidation = (user: UserInterface) => {
       .max(20)
       .message('User "userName" must be between 4 and 20 characters')
       .required(),
-      isAdmin: Joi.boolean()
-      .message('is admin is not valid')
-      .required()
-      .default(false),
+      isAdmin: Joi.boolean().default(false),
   });
   return schema.validate(user);
 };
 
-export default userValidation;
+export default registerValidation;
