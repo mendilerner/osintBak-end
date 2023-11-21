@@ -1,7 +1,6 @@
 import * as ordersService from "./orders.service";
 import { handleError } from "../../utils/handleErrors";
 import { Request, Response } from "express";
-import { string } from "joi";
 import { OrderInterface } from "./ordersInterface";
 
 export const handleGetOrders = async (req: Request, res: Response) => {
