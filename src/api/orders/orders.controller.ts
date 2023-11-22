@@ -8,7 +8,7 @@ export const handleGetOrders = async (req: Request, res: Response) => {
     const products = await ordersService.getOrders();
     return res.json(products).status(200);
   } catch (error) {
-    handleError(res, error);
+    handleError(res, error,500);
   }
 };
 export const GetOrdersById = async (req: Request, res: Response) => {
@@ -18,10 +18,10 @@ export const GetOrdersById = async (req: Request, res: Response) => {
       const products = await ordersService.GetOrdersById(id);
       return res.json(products).status(200);
     } else {
-      return new Error("id not found in thee controller");
+      return res.status(400).json({ error: "ID not found in the controller" });
     }
   } catch (error) {
-    handleError(res, error);
+    handleError(res, error,500);
   }
 };
 export const postOrder = async (req: Request, res: Response) => {
@@ -29,12 +29,12 @@ export const postOrder = async (req: Request, res: Response) => {
     const orderDetails: OrderInterface = req.body;
     if (orderDetails) {
       const newOrder = await ordersService.postOrder(orderDetails);
-      return res.json(newOrder).status(200);
+      return res.json(newOrder).status(201);
     } else {
-      return new Error("problem with the Order structure");
+      return res.status(400).json({ error: "Problem with the Order structure" });
     }
   } catch (error) {
-    handleError(res, error);
+    handleError(res, error,500);
   }
 };
 export const putOrder = async (req: Request, res: Response) => {
@@ -45,10 +45,10 @@ export const putOrder = async (req: Request, res: Response) => {
       const newOrder = await ordersService.putOrder(id,orderDetails);
       return res.json(newOrder).status(200);
     } else {
-      return new Error("problem with the Order structure");
+      return res.status(400).json({ error: "Problem with the Order structure" });
     }
   } catch (error) {
-    handleError(res, error);
+    handleError(res, error,500);
   }
 };
 
