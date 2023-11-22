@@ -16,7 +16,7 @@ const ShippingDetailsSchema = new Schema<ShippingDetails>({
 
 const OrderSchema = new Schema<OrderInterface>({
   cartItems: [{ type: ProductSchema, required: true }],
-  orderTime: { type: Date, default: Date.now },
+  orderTime: { type: Date },
   status: { type: String, default: "processing" },
   price: { type: Number, required: true },
   shippingDetails: { type: ShippingDetailsSchema, required: true },
