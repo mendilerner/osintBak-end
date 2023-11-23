@@ -11,12 +11,10 @@ export const getOrders = async (): Promise<OrderInterface[]> => {
     return handleCallDbError(error);
   }
 };
-export const GetOrdersById = async (id: string): Promise<OrderInterface|null> => {
+export const GetOrdersById = async (_userId: string): Promise<OrderInterface[]> => {
   try {
-    if (id.length !== 24) {
-      throw new Error("Invalid ID"); 
-    }
-    const order = await OrderModel.findById(id).exec(); 
+    const order = await OrderModel.find({userId: _userId}).exec();
+    if(order.length === 0) throw Error('this user has not any order')
     return order; 
   } catch (error) {
     return handleCallDbError(error);

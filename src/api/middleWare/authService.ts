@@ -25,7 +25,7 @@ const auth = (req: UserRequest, res: Response, next: NextFunction) => {
         return next();
       }
     } catch (err) {
-      return handleError(res, err, 500);
+      return handleError(res, err, 401);
     }
   } else if (tokeGenerator === "not_jwt") {
     return handleError(res, new Error("you do not use jwt"), 503);
