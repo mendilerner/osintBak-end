@@ -17,7 +17,9 @@ app.use(cookieParser());
 
 app.use("/api", usersRouter);
 app.use("/api/orders",ordersRouter);
-
+app.use('/', (req, res) => {
+  res.json({message: "hello form OMS server"})
+})
 
 
 const PORT = process.env.PORT;
