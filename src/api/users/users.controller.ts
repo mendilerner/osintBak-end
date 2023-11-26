@@ -15,11 +15,11 @@ export const handleUserRegistration = async (req: UserRequest, res: Response) =>
   try {
     const user: UserInterface = req.body;
     const registeratorAdmin = req.user?.isAdmin
-    if (!registeratorAdmin) return res.status(401).json({message: 'only admin allowed to add new users'})
+    if (!registeratorAdmin) return res.status(401).send('only admin allowed to add new users')
     const { error } = registerValidation(user);
     if (error?.details[0].message) throw new Error(error?.details[0].message);
     const userFromDB = await register(user);
-    return res.status(200).json({message: "registered successfully"});
+    return res.status(200).json({message: "registered successfully", user: userFromDB});
   } catch (error) {
     if (error instanceof Error) handleError(res, error);
   }
