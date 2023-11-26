@@ -18,7 +18,6 @@ export const register = async (user: UserInterface) => {
 
 export const login = async (userFromClient: UserInterface) => {
   try {
-    console.log('enter to service');
     const userInDB = (await getUserByEmail(
       userFromClient.email
     )) as unknown as UserInterface;

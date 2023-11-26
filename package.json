@@ -4,9 +4,9 @@
   "description": "",
   "main": "./dist/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest",
     "start": "node .",
-    "dev" : "nodemon .",
+    "dev": "nodemon .",
     "build": "tsc"
   },
   "keywords": [],
@@ -34,6 +34,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.0",
     "morgan": "^1.10.0",
+    "vitest": "^0.34.6"
     "node-cron": "^3.0.3"
+
   }
 }
