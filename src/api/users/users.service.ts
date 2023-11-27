@@ -6,7 +6,7 @@ import chalk from "chalk";
 export const register = async (user: UserInterface) => {
   try {
     const userExist = await getUserByEmail(user.email);
-    if (userExist) throw new Error("This user is already registered!");
+    if (userExist) throw new Error("This user has already registered!");
     user.password = generateUserPassword(user.password);
     const insertedUser = await addUser(user);
     return insertedUser;
