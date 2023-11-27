@@ -14,7 +14,7 @@ export const getOrders = async (): Promise<OrderInterface[]> => {
 export const GetOrdersById = async (_userId: string): Promise<OrderInterface[]> => {
   try {
     const order = await OrderModel.find({userId: _userId}).exec();
-    if(order.length === 0) throw Error('this user has not any order')
+    if(order.length === 0) throw Error('this user does not have any orders')
     return order; 
   } catch (error) {
     return handleCallDbError(error);

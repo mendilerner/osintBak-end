@@ -8,7 +8,7 @@ export const handleError = (
 ) => {
   if (error && error instanceof Error)
     return res.status(status).send(error.message);
-  return res.status(status).send("Oops... an error accorded");
+  return res.status(status).send("Oops... an error occurred");
 };
 
 export const handleJsonfileError = <T>(error: T) => {

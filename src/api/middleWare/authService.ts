@@ -20,7 +20,7 @@ const auth = (req: UserRequest, res: Response, next: NextFunction) => {
           throw new Error("Authentication error: please login");
         const userInfo = varifyToken(tokenFromClient) as tokenDataInterface;
         if (!userInfo)
-          throw new Error("Authentication error: Unauthorize user");
+          throw new Error("Authentication error: Unauthorized user");
         req.user = userInfo;
         return next();
       }

@@ -1,5 +1,5 @@
 import * as ordersDal from "./orders.dal";
-import chalk from "chalk";
+import chalk from "chalk";  
 import { OrderInterface } from "./ordersInterface";
 
 export const getOrders = async () => {
@@ -31,7 +31,7 @@ export const postOrder = async (order: OrderInterface) => {
       const orders = await ordersDal.postOrder(order);
       return orders;
     } else {
-      throw new Error("cant add order");
+      throw new Error("can't add order");
     }
   } catch (error) {
     console.log(chalk.redBright(error));
@@ -44,7 +44,7 @@ export const putOrder = async (id:string,order: OrderInterface) => {
       const orders = await ordersDal.putOrder(id,order);
       return orders;
     } else {
-      throw new Error("cant add order");
+      throw new Error("can't add order");
     }
   } catch (error) {
     console.log(chalk.redBright(error));
