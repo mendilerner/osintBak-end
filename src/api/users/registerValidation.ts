@@ -2,7 +2,6 @@ import Joi from "joi";
 import UserInterface from "./UserInterface";
 
 const registerValidation = (user: UserInterface) => {
-  console.log('enter to register validation');
   const schema = Joi.object({
     _id: Joi.string().allow(""),
     email: Joi.string()

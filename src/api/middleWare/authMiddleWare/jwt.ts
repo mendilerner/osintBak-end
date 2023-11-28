@@ -1,11 +1,9 @@
 import jwt from 'jsonwebtoken'
+import { tokenDataInterface } from './authInterfaces'
 
 const key = process.env.JWT_KEY as string
 
-export interface tokenDataInterface{
-    email: string;
-    isAdmin: boolean;
-}
+
 
 const expirationTime = '1d'
 export const generateAuthToken = (user:tokenDataInterface) => {
