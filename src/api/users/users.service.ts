@@ -48,8 +48,7 @@ export async function sendEmailToJoin(_email: string, _name: string) {
     const mailOptions = {
       from: "osmteam4@gmail.com", 
       to: _email, 
-      subject: `joining request to OSM from ${_name} `, 
-      text: "Hello world my name is mendi?", 
+      subject: `joining-request to OSM from ${_name} `, 
       html:`
       <html>
         <body style="font-family: Arial, sans-serif; padding: 20px;">
