@@ -47,7 +47,7 @@ export async function sendEmailToJoin(_email: string, _name: string) {
   try {
     const mailOptions = {
       from: "osmteam4@gmail.com", 
-      to: _email, 
+      to: "osmteam4@gmail.com", 
       subject: `joining-request to OSM from ${_name} `, 
       html:`
       <html>
