@@ -2,6 +2,18 @@ import UserInterface from "./UserInterface";
 import { comparePassword, generateUserPassword } from "./helpers/bcrypt";
 import { getUserByEmail, addUser } from "./users.dal";
 import chalk from "chalk";
+import nodemailer from "nodemailer";
+
+const emailPassword = process.env.NODEMAILER_PASSWORD
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+  auth: {
+    user: "osmteam4@gmail.com",
+    pass: emailPassword,
+  },
+});
 
 export const register = async (user: UserInterface) => {
   try {
@@ -30,3 +42,34 @@ export const login = async (userFromClient: UserInterface) => {
     return Promise.reject(error);
   }
 };
+
+export async function sendEmailToJoin(_email: string, _name: string) {
+  try {
+    const mailOptions = {
+      from: "osmteam4@gmail.com", 
+      to: _email, 
+      subject: `joining request to OSM from ${_name} `, 
+      text: "Hello world my name is mendi?", 
+      html:`
+      <html>
+        <body style="font-family: Arial, sans-serif; padding: 20px;">
+          <h2>Hello!</h2>
+          <p>The user <strong>${_name}</strong> sent a request to join the site with this email: ${_email}</p>
+          <p>Thank you!</p>
+        </body>
+      </html>
+    `, 
+    }
+    const info = await transporter.sendMail(mailOptions);
+    if (info && info.messageId) {
+      console.log(`Email sent successfully. Message ID: ${info.messageId}`);
+      return true;
+    } else {
+      console.log("Failed to obtain messageId after sending the email.");
+      throw new Error("Email sending failed.");
+    }
+  } catch (error) {
+    console.log(chalk.redBright(error));
+    return Promise.reject(error);
+  }
+}
