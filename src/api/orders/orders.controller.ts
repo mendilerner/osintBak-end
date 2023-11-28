@@ -1,10 +1,10 @@
-import * as ordersService from "./orders.service";
+import ordersService from "./orders.service";
 import { handleError } from "../../utils/handleErrors";
 import { Request, Response } from "express";
 import { OrderInterface } from "./ordersInterface";
 import { UserRequest } from "../middleWare/authMiddleWare/authInterfaces";
 
-export const handleGetOrders = async (req: UserRequest, res: Response) => {
+const getOrders = async (req: UserRequest, res: Response) => {
   try {
     const registeratorAdmin = req.user?.isAdmin;
     if (!registeratorAdmin)
@@ -17,35 +17,33 @@ export const handleGetOrders = async (req: UserRequest, res: Response) => {
     handleError(res, error, 500);
   }
 };
-export const GetOrdersById = async (req: Request, res: Response) => {
+const getOrdersById = async (req: Request, res: Response) => {
   try {
     const id = String(req.params.id);
-    if (id) {
-      const products = await ordersService.GetOrdersById(id);
+    const products = await ordersService.GetOrdersById(id);
+    if (products) {
       return res.json(products).status(200);
     } else {
-      return res.status(400).json({ error: "ID not found in the controller" });
+      return res.status(400).json({ error: " no order found with this ID " });
     }
   } catch (error) {
     handleError(res, error, 500);
   }
 };
-export const postOrder = async (req: Request, res: Response) => {
+const postOrder = async (req: Request, res: Response) => {
   try {
     const orderDetails: OrderInterface = req.body;
-    if (orderDetails) {
-      const newOrder = await ordersService.postOrder(orderDetails);
+    const newOrder = await ordersService.postOrder(orderDetails);
+    if (newOrder) {
       return res.json(newOrder).status(201);
     } else {
-      return res
-        .status(400)
-        .json({ error: "Problem with the Order structure" });
+      return res.status(400).json({ error: "can't post Order " });
     }
   } catch (error) {
     handleError(res, error, 500);
   }
 };
-export const putOrder = async (req: UserRequest, res: Response) => {
+const putOrder = async (req: UserRequest, res: Response) => {
   try {
     const registeratorAdmin = req.user?.isAdmin;
     if (!registeratorAdmin)
@@ -54,15 +52,14 @@ export const putOrder = async (req: UserRequest, res: Response) => {
         .json({ message: "Authentication error: Unauthorized user" });
     const id = String(req.params.id);
     const orderDetails: OrderInterface = req.body;
-    if (orderDetails) {
-      const newOrder = await ordersService.putOrder(id, orderDetails);
+    const newOrder = await ordersService.putOrder(id, orderDetails);
+    if (newOrder) {
       return res.json(newOrder).status(200);
     } else {
-      return res
-        .status(400)
-        .json({ error: "Problem with the Order structure" });
+      return res.status(400).json({ error: "Problem with the put the order " });
     }
   } catch (error) {
     handleError(res, error, 500);
   }
 };
+export default { getOrders, getOrdersById, postOrder, putOrder };

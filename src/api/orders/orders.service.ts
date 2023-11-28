@@ -1,8 +1,8 @@
-import * as ordersDal from "./orders.dal";
-import chalk from "chalk";  
+import ordersDal from "./orders.dal";
+import chalk from "chalk";
 import { OrderInterface } from "./ordersInterface";
 
-export const getOrders = async () => {
+const getOrders = async () => {
   try {
     const orders = await ordersDal.getOrders();
     if (!orders) throw new Error("no products in the database");
@@ -12,8 +12,7 @@ export const getOrders = async () => {
     return Promise.reject(error);
   }
 };
-
-export const GetOrdersById = async (id: string) => {
+const GetOrdersById = async (id: string) => {
   try {
     const orders = await ordersDal.GetOrdersById(id);
     if (!orders)
@@ -24,11 +23,10 @@ export const GetOrdersById = async (id: string) => {
     return Promise.reject(error);
   }
 };
-
-export const postOrder = async (order: OrderInterface) => {
+const postOrder = async (order: OrderInterface) => {
   try {
-    if (order) {
-      const orders = await ordersDal.postOrder(order);
+    const orders = await ordersDal.postOrder(order);
+    if (orders) {
       return orders;
     } else {
       throw new Error("can't add order");
@@ -38,10 +36,10 @@ export const postOrder = async (order: OrderInterface) => {
     return Promise.reject(error);
   }
 };
-export const putOrder = async (id:string,order: OrderInterface) => {
+const putOrder = async (id: string, order: OrderInterface) => {
   try {
-    if (order) {
-      const orders = await ordersDal.putOrder(id,order);
+    const orders = await ordersDal.putOrder(id, order);
+    if (orders) {
       return orders;
     } else {
       throw new Error("can't add order");
@@ -51,3 +49,4 @@ export const putOrder = async (id:string,order: OrderInterface) => {
     return Promise.reject(error);
   }
 };
+export default { getOrders, GetOrdersById, postOrder, putOrder };

@@ -1,15 +1,12 @@
 import express from "express";
-import { handleGetOrders } from "./orders.controller";
-import { GetOrdersById } from "./orders.controller";
-import { postOrder } from "./orders.controller";
-import { putOrder } from "./orders.controller";
+import ordersController from "./orders.controller";
 import { validateOrder } from "../middleWare/orderValidate/orderValidateor";
 import auth from "../middleWare/authMiddleWare/authService";
 const router = express.Router();
 
-router.get("/", auth, handleGetOrders);
-router.get("/:id", GetOrdersById);
-router.post("/", validateOrder, postOrder);
-router.put("/:id", auth, validateOrder, putOrder);
+router.get("/", auth, ordersController.getOrders);
+router.get("/:id", ordersController.getOrdersById);
+router.post("/", validateOrder, ordersController.postOrder);
+router.put("/:id", auth, validateOrder, ordersController.putOrder);
 
 export default router;
