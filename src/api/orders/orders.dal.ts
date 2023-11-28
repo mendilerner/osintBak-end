@@ -1,9 +1,9 @@
 import { handleCallDbError } from "../../utils/handleErrors";
 import OrderModel from "./ordersSchema";
 import { OrderInterface } from "./ordersInterface";
-import cron from 'node-cron';
+import cron from "node-cron";
 
-export const getOrders = async (): Promise<OrderInterface[]> => {  
+export const getOrders = async (): Promise<OrderInterface[]> => {
   try {
     const data = await OrderModel.find().exec();
     return data;
@@ -11,11 +11,13 @@ export const getOrders = async (): Promise<OrderInterface[]> => {
     return handleCallDbError(error);
   }
 };
-export const GetOrdersById = async (_userId: string): Promise<OrderInterface[]> => {
+export const GetOrdersById = async (
+  _userId: string
+): Promise<OrderInterface[]> => {
   try {
-    const order = await OrderModel.find({userId: _userId}).exec();
-    if(order.length === 0) throw Error('this user does not have any orders')
-    return order; 
+    const order = await OrderModel.find({ userId: _userId }).exec();
+    if (order.length === 0) throw Error("this user does not have any orders");
+    return order;
   } catch (error) {
     return handleCallDbError(error);
   }
@@ -50,9 +52,9 @@ export const putOrder = async (
 const updateOrdersStatus = async () => {
   try {
     const currentDate = new Date();
-    let allOrders:OrderInterface[]=[];
+    let allOrders: OrderInterface[] = [];
     try {
-       allOrders = await OrderModel.find().exec();
+      allOrders = await OrderModel.find().exec();
     } catch (error) {
       return handleCallDbError(error);
     }
@@ -68,39 +70,18 @@ const updateOrdersStatus = async () => {
         timePassed >= oneDayInMillis && timePassed < 2 * oneDayInMillis;
 
       if (
-        exactlyOneDayPassed &&
-        order.status === "processing" &&
-        order.shippingDetails.orderType === "express"
-      ) {        
-        const updatedOrder = await OrderModel.findByIdAndUpdate(
-          order._id,
-          { status: "sent" },
-          { new: true }
-        );
-        if (updatedOrder) {
-          console.log(" updating order work:", order._id,"status:", updatedOrder.status);
-        } else {
-          console.log("Error updating order:", order._id);
-        }
-      } else if (
-        fiveDaysPassed &&
-        order.status === "sent" &&
-        order.shippingDetails.orderType === "express"
-      ) {
-        const updatedOrder = await OrderModel.findByIdAndUpdate(
-          order._id,
-          { status: "accepted" },
-          { new: true }
-        );
-        if (updatedOrder) {
-          console.log(" updating order work:", order._id,"status:", updatedOrder.status);
-        } else {
-          console.log("Error updating order:", order._id);
-        }
-      } else if (
-        fiveDaysPassed &&
-        order.status === "processing" &&
-        order.shippingDetails.orderType === "regular"
+        (exactlyOneDayPassed &&
+          order.status === "processing" &&
+          order.shippingDetails.orderType === "express") ||
+        (fiveDaysPassed &&
+          order.status === "sent" &&
+          order.shippingDetails.orderType === "express") ||
+        (fiveDaysPassed &&
+          order.status === "processing" &&
+          order.shippingDetails.orderType === "regular") ||
+        (towWeeksPassed &&
+          order.status === "sent" &&
+          order.shippingDetails.orderType === "regular")
       ) {
         const updatedOrder = await OrderModel.findByIdAndUpdate(
           order._id,
@@ -108,22 +89,12 @@ const updateOrdersStatus = async () => {
           { new: true }
         );
         if (updatedOrder) {
-          console.log(" updating order work:", order._id,"status:", updatedOrder.status);
-        } else {
-          console.log("Error updating order:", order._id);
-        }
-      } else if (
-        towWeeksPassed &&
-        order.status === "sent" &&
-        order.shippingDetails.orderType === "regular"
-      ) {
-        const updatedOrder = await OrderModel.findByIdAndUpdate(
-          order._id,
-          { status: "accepted" },
-          { new: true }
-        );
-        if (updatedOrder) {
-          console.log(" updating order work:", order._id,"status:", updatedOrder.status);
+          console.log(
+            " updating order work:",
+            order._id,
+            "status:",
+            updatedOrder.status
+          );
         } else {
           console.log("Error updating order:", order._id);
         }
@@ -135,15 +106,19 @@ const updateOrdersStatus = async () => {
   }
 };
 
-cron.schedule('0 0 * * *', async () => {
-  try {
-    console.log('Running updateOrdersStatus function...');
-    await updateOrdersStatus();
-    console.log('updateOrdersStatus function executed successfully.');
-  } catch (error) {
-    console.error('Error running updateOrdersStatus function:', error);
+cron.schedule(
+  "0 0 * * *",
+  async () => {
+    try {
+      console.log("Running updateOrdersStatus function...");
+      await updateOrdersStatus();
+      console.log("updateOrdersStatus function executed successfully.");
+    } catch (error) {
+      console.error("Error running updateOrdersStatus function:", error);
+    }
+  },
+  {
+    scheduled: true,
+    timezone: "Asia/Jerusalem",
   }
-}, {
-  scheduled: true,
-  timezone: 'Asia/Jerusalem',
-});
+);
