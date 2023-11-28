@@ -4,7 +4,7 @@ import { getUserByEmail, addUser } from "./users.dal";
 import chalk from "chalk";
 import nodemailer from "nodemailer";
 
-const emailPassword = process.env.NODEMAILER_PASSWORD
+const emailPassword = process.env.NODEMAILER_PASSWORD || "not_password_provided"
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
     port: 587,
