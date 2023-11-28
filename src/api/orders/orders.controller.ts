@@ -2,8 +2,7 @@ import * as ordersService from "./orders.service";
 import { handleError } from "../../utils/handleErrors";
 import { Request, Response } from "express";
 import { OrderInterface } from "./ordersInterface";
-import { UserRequest } from "../middleWare/authMiddleWare/authService";
-import UserInterface from "../users/UserInterface";
+import { UserRequest } from "../middleWare/authMiddleWare/authInterfaces";
 
 export const handleGetOrders = async (req: UserRequest, res: Response) => {
   try {
