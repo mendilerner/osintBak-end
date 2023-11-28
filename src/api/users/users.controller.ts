@@ -1,5 +1,5 @@
-import UserInterface from "./UserInterface";
-import { register, login } from "./users.service";
+import UserInterface, { requsetToJoinInterface } from "./UserInterface";
+import { register, login, sendEmailToJoin } from "./users.service";
 import { handleError } from "../../utils/handleErrors";
 
 import registerValidation from "./registerValidation";
@@ -39,6 +39,18 @@ export const handleLogin = async (req: Request, res: Response) => {
       isAdmin: user.isAdmin,
     });
     res.status(200).json({ access_token: token });
+  } catch (error) {
+    handleError(res, error, 401);
+  }
+};
+
+
+export const handleSendEmailToJoin = async (req: Request, res: Response) => {
+  try {
+    const {email, name}  = req.body as requsetToJoinInterface
+    const success = await sendEmailToJoin(email, name)
+    if (success)
+    res.status(200).json({ message: 'mail sended successfully' });
   } catch (error) {
     handleError(res, error, 401);
   }
