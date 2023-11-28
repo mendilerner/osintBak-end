@@ -3,15 +3,15 @@ import OrderModel from "./ordersSchema";
 import { OrderInterface } from "./ordersInterface";
 import cron from "node-cron";
 
-export const getOrders = async (): Promise<OrderInterface[]> => {
+ const getOrders = async (): Promise<OrderInterface[]> => {
   try {
-    const data = await OrderModel.find().exec();
+    const data = await OrderModel.find().sort({ orderTime: -1 }).exec();
     return data;
   } catch (error) {
     return handleCallDbError(error);
   }
 };
-export const GetOrdersById = async (
+ const GetOrdersById = async (
   _userId: string
 ): Promise<OrderInterface[]> => {
   try {
@@ -22,7 +22,7 @@ export const GetOrdersById = async (
     return handleCallDbError(error);
   }
 };
-export const postOrder = async (
+ const postOrder = async (
   order: OrderInterface
 ): Promise<OrderInterface> => {
   try {
@@ -33,7 +33,7 @@ export const postOrder = async (
     return handleCallDbError(error);
   }
 };
-export const putOrder = async (
+ const putOrder = async (
   id: string,
   order: OrderInterface
 ): Promise<OrderInterface> => {
@@ -52,6 +52,7 @@ export const putOrder = async (
 const updateOrdersStatus = async () => {
   try {
     const currentDate = new Date();
+    const oneDayInMillis = 24 * 60 * 60 * 1000;
     let allOrders: OrderInterface[] = [];
     try {
       allOrders = await OrderModel.find().exec();
@@ -60,27 +61,13 @@ const updateOrdersStatus = async () => {
     }
     for (const order of allOrders) {
       const orderDate = order.orderTime as Date;
-      const oneDayInMillis = 24 * 60 * 60 * 1000;
-      const oneWeekInMillis = 7 * oneDayInMillis;
-      const towWeekInMillis = 14 * oneDayInMillis;
       const timePassed = currentDate.getTime() - orderDate.getTime();
-      const fiveDaysPassed = timePassed >= oneWeekInMillis;
-      const towWeeksPassed = timePassed >= towWeekInMillis;
-      const exactlyOneDayPassed =
-        timePassed >= oneDayInMillis && timePassed < 2 * oneDayInMillis;
-
       if (
-        (exactlyOneDayPassed &&
+        (timePassed>oneDayInMillis&&timePassed<2 &&
           order.status === "processing" &&
           order.shippingDetails.orderType === "express") ||
-        (fiveDaysPassed &&
-          order.status === "sent" &&
-          order.shippingDetails.orderType === "express") ||
-        (fiveDaysPassed &&
+        (timePassed*5>oneDayInMillis&&timePassed<6 &&
           order.status === "processing" &&
-          order.shippingDetails.orderType === "regular") ||
-        (towWeeksPassed &&
-          order.status === "sent" &&
           order.shippingDetails.orderType === "regular")
       ) {
         const updatedOrder = await OrderModel.findByIdAndUpdate(
@@ -96,23 +83,43 @@ const updateOrdersStatus = async () => {
             updatedOrder.status
           );
         } else {
-          console.log("Error updating order:", order._id);
+          console.error("Error updating order:", order._id);
         }
-      } 
+      } else if (
+        (timePassed*5>oneDayInMillis&&timePassed<6 &&
+          order.status === "sent" &&
+          order.shippingDetails.orderType === "express") ||
+        (timePassed*14>oneDayInMillis&&timePassed<15 &&
+          order.status === "sent" &&
+          order.shippingDetails.orderType === "regular")
+      ) {
+        const updatedOrder = await OrderModel.findByIdAndUpdate(
+          order._id,
+          { status: "accepted" },
+          { new: true }
+        );
+        if (updatedOrder) {
+          console.log(
+            " updating order work:",
+            order._id,
+            "status:",
+            updatedOrder.status
+          );
+        } else {
+          console.error("Error updating order:", order._id);
+        }
+      }
     }
   } catch (error) {
     console.error("Error updating orders:", error);
     throw new Error("Failed to update orders");
   }
 };
-
 cron.schedule(
   "0 0 * * *",
   async () => {
     try {
-      console.log("Running updateOrdersStatus function...");
       await updateOrdersStatus();
-      console.log("updateOrdersStatus function executed successfully.");
     } catch (error) {
       console.error("Error running updateOrdersStatus function:", error);
     }
@@ -122,3 +129,4 @@ cron.schedule(
     timezone: "Asia/Jerusalem",
   }
 );
+export default{getOrders,GetOrdersById,postOrder,putOrder}
