@@ -1,4 +1,4 @@
-import { handleCallDbError, handleJsonfileError } from "../../utils/handleErrors";
+import { handleCallDbError} from "../../utils/handleErrors";
 import UserModel from "./usersSchema";
 import UserInterface from "./UserInterface";
 

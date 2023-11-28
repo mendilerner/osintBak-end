@@ -11,12 +11,6 @@ export const handleError = (
   return res.status(status).send("Oops... an error occurred");
 };
 
-export const handleJsonfileError = <T>(error: T) => {
-  if (error instanceof Error) return Promise.reject(error);
-  console.log(chalk.redBright(error));
-  return Promise.reject(new Error("Something went wong!"));
-};
-
 export const handleCallDbError = <T>(error: T) => {
   if (error instanceof Error) return Promise.reject(error);
   console.log(chalk.redBright(error));
