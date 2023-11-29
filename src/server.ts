@@ -16,9 +16,9 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/api", usersRouter);
-app.use("/api/orders",ordersRouter);
-app.use('/', (req, res) => {
+app.use("/oms/api", usersRouter);
+app.use("/oms/api/orders",ordersRouter);
+app.use('/oms/', (req, res) => {
   res.json({message: "hello form OMS server"})
 })
 
