@@ -1,0 +1,55 @@
+[{
+    "_id": {
+      "$oid": "655b3d0ca2c0b0bb39ab5554"
+    },
+    "userName": "user1",
+    "email": "user1@example.com",
+    "password": "password1",
+    "isAdmin": false
+  },
+  {
+    "_id": {
+      "$oid": "655b3d0fa2c0b0bb39ab5557"
+    },
+    "userName": "user2",
+    "email": "wpppkkEmail33@gmail.com",
+    "password": "$2a$10$DLn7gCdIpCCdxuhwG6iHcuSN3TbVnLuqMqRcfwVf7T3Ep2ytheoEC",
+    "isAdmin": true
+  },
+  {
+    "_id": {
+      "$oid": "655bae2eb0702c19708037ec"
+    },
+    "userName": "mendi",
+    "email": "trywithtoken@gmail.com",
+    "password": "$2a$10$DAa8FhhVAE8buiOVKdFYX.nHUTSxJ9Ex8jiNUQ4mm7epWD5maCEy2",
+    "isAdmin": true
+  },
+  {
+    "_id": {
+      "$oid": "655bd7228e200cb2a777faae"
+    },
+    "userName": "mendi",
+    "email": "trywithtoken22@gmail.com",
+    "password": "$2a$10$63lLMoV6gIV.QTL7YcSyM.6m8MZQ.AOFSGkEl0CDxCKSXgb0fiyBa",
+    "isAdmin": true
+  },
+  {
+    "_id": {
+      "$oid": "655c9301a3db3690f02f1816"
+    },
+    "userName": "mendiLerner",
+    "email": "mendiLerner@gmail.com",
+    "password": "$2a$10$Ij0lyPb4y2e6Ly7whXt6Qe9AEOaoOa7FQ5FyNQbNObNKzSIf1S0hu",
+    "isAdmin": true
+  },
+  {
+    "_id": {
+      "$oid": "6563a92e9a8818c9ad76bbda"
+    },
+    "userName": "JohnDoe",
+    "email": "johndoe@example.com",
+    "password": "password",
+    "isAdmin": false
+  }
+]
