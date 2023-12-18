@@ -11,4 +11,8 @@ export interface requsetToJoinInterface {
   email: string;
 }
 
+export interface LoginInterface {
+  email: string;
+  password: string;
+}
 export default UserInterface;

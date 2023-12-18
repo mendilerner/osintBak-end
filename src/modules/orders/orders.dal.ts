@@ -1,5 +1,5 @@
 import { handleCallDbError } from "../../utils/handleErrors";
-import OrderModel from "./ordersSchema";
+import OrderModel from "./orders.model";
 import { OrderInterface } from "./ordersInterface";
 import cron from "node-cron";
 
@@ -27,7 +27,6 @@ import cron from "node-cron";
 ): Promise<OrderInterface> => {
   try {
     const newOrder = await OrderModel.create(order);
-    console.log("New Order:", newOrder);
     return newOrder;
   } catch (error) {
     return handleCallDbError(error);

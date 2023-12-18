@@ -1,8 +1,8 @@
-import mongoose, { Schema, Model} from "mongoose";
+import mongoose, { Schema, Model } from "mongoose";
 import UserInterface from "./UserInterface";
 
 const UserSchema: Schema<UserInterface> = new Schema<UserInterface>(
-  { 
+  {
     userName: {
       type: String,
       required: true,
@@ -18,9 +18,12 @@ const UserSchema: Schema<UserInterface> = new Schema<UserInterface>(
     isAdmin: {
       type: Boolean,
       required: true,
-    }
+    },
   },
   { timestamps: false, versionKey: false }
 );
-const UserModel: Model<UserInterface> = mongoose.model<UserInterface>("user", UserSchema);
+const UserModel: Model<UserInterface> = mongoose.model<UserInterface>(
+  "user",
+  UserSchema
+);
 export default UserModel;

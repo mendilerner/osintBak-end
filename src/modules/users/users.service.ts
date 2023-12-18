@@ -1,14 +1,18 @@
-import UserInterface from "./UserInterface";
-import { comparePassword, generateUserPassword } from "./helpers/bcrypt";
+import UserInterface, { LoginInterface } from "./UserInterface";
+import {
+  comparePassword,
+  generateUserPassword,
+} from "./helpers/bcrypt";
 import { getUserByEmail, addUser } from "./users.dal";
 import chalk from "chalk";
 import nodemailer from "nodemailer";
 
-const emailPassword = process.env.NODEMAILER_PASSWORD || "not_password_provided"
+const emailPassword =
+  process.env.NODEMAILER_PASSWORD || "not_password_provided";
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
   auth: {
     user: "osmteam4@gmail.com",
     pass: emailPassword,
@@ -28,7 +32,7 @@ export const register = async (user: UserInterface) => {
   }
 };
 
-export const login = async (userFromClient: UserInterface) => {
+export const login = async (userFromClient: LoginInterface) => {
   try {
     const userInDB = (await getUserByEmail(
       userFromClient.email
@@ -46,10 +50,10 @@ export const login = async (userFromClient: UserInterface) => {
 export async function sendEmailToJoin(_email: string, _name: string) {
   try {
     const mailOptions = {
-      from: "osmteam4@gmail.com", 
-      to: "osmteam4@gmail.com", 
-      subject: `joining-request to OSM from ${_name} `, 
-      html:`
+      from: "osmteam4@gmail.com",
+      to: "osmteam4@gmail.com",
+      subject: `joining-request to OSM from ${_name} `,
+      html: `
       <html>
         <body style="font-family: Arial, sans-serif; padding: 20px;">
           <h2>Hello!</h2>
@@ -57,8 +61,8 @@ export async function sendEmailToJoin(_email: string, _name: string) {
           <p>Thank you!</p>
         </body>
       </html>
-    `, 
-    }
+    `,
+    };
     const info = await transporter.sendMail(mailOptions);
     if (info && info.messageId) {
       console.log(`Email sent successfully. Message ID: ${info.messageId}`);

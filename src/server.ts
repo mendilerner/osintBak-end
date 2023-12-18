@@ -1,29 +1,44 @@
-import express from "express";
-import chalk from "chalk";
 import morgan from "./logger/morgan";
-import cookieParser from 'cookie-parser'
-//import cors from "./cors/cors";
-import cors from 'cors'
-import {connectToMongoDB} from './dataAccess/mongooseConnection'
-import usersRouter from './api/users/users.router'
-import ordersRouter from './api/orders/orders.router'
+import { connectToMongoDB } from "./dataAccess/mongooseConnection";
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import express from "express";
+import http from "http";
+import cors from "cors";
+import typeDefs from "./graphql/typeDef";
+import resolvers from "./graphql/resolves";
+import apolloLogger from "./logger/apolloLogger";
 
-connectToMongoDB()
 
+connectToMongoDB();
 const app = express();
-app.use(morgan);
-app.use(cors());
-app.use(express.json());
-app.use(cookieParser());
 
-app.use("/users", usersRouter);
-app.use("/orders",ordersRouter);
-app.use('/', (req, res) => {
-  res.json({message: "hello form OMS server"})
-})
+const httpServer = http.createServer(app);
 
+const server = new ApolloServer<{token?: string}>({
+  typeDefs,
+  resolvers,
+  plugins: [ApolloServerPluginDrainHttpServer({ httpServer }), apolloLogger],
+});
 
-const PORT = process.env.PORT;
-app.listen(PORT, () => {
-  console.log(chalk.blueBright(`Server listening on port: ${PORT}`));
+server.start().then(() => {
+  app.use(
+    "/",
+    cors<cors.CorsRequest>(),
+    express.json(),
+    morgan,
+    expressMiddleware(server, {
+      context: async ({ req }) => ({ token: req.headers.access_token }),
+    })
+  );
+  app.use("/", (req, res) => {
+    res.json({ message: "hello form OMS server" });
+  });
+
+  new Promise<void>((resolve) =>
+    httpServer.listen({ port: 4000 }, resolve)
+  ).then(() => {
+    console.log(`🚀 Server ready at http://localhost:4000/`);
+  });
 });

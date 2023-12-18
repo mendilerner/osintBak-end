@@ -1,7 +1,7 @@
 import Joi from "joi";
-import UserInterface from "./UserInterface";
+import UserInterface from "../UserInterface";
 
-const loginValidation = (user: UserInterface) => {
+const registerValidation = (user: UserInterface) => {
   const schema = Joi.object({
     _id: Joi.string().allow(""),
     email: Joi.string()
@@ -19,8 +19,14 @@ const loginValidation = (user: UserInterface) => {
           'user "password" must be at least nine characters long and contain an uppercase letter, a lowercase letter, a number and one of the following characters !@#$%^&*-',
       })
       .required(),
+    userName: Joi.string()
+      .min(4)
+      .max(20)
+      .message('User "userName" must be between 4 and 20 characters')
+      .required(),
+    isAdmin: Joi.boolean().default(false),
   });
   return schema.validate(user);
 };
 
-export default loginValidation;
+export default registerValidation;

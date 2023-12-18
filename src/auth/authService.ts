@@ -1,8 +1,7 @@
 import { varifyToken } from "./jwt";
-import { handleError } from "../../../utils/handleErrors";
+import { handleError } from "../utils/handleErrors";
 import { Response, NextFunction } from "express";
 import { UserRequest, tokenDataInterface } from "./authInterfaces";
-
 
 const tokeGenerator = "jwt";
 const auth = (req: UserRequest, res: Response, next: NextFunction) => {
