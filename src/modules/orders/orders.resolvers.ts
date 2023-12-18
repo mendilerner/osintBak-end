@@ -41,7 +41,7 @@ const ordersResolvers = {
       if (!newOrder) {
         throw new Error("can't post Order ");
       } else {
-        redis.del("orders");
+        redis.del(["orders","ProfitsAndRevenue","completedOrders","TopProducts"]);
         return newOrderFromDB;
       }
     },
@@ -58,8 +58,7 @@ const ordersResolvers = {
       if (!updatedOrderFromDB) {
         throw new Error("Problem with the put the order");
       } else {
-        redis.del("orders");
-        redis.del(`ordersOf{${id}}`);
+        redis.del(["orders","ProfitsAndRevenue","completedOrders","TopProducts",`ordersOf{${id}}`]);
         return updatedOrderFromDB;
       }
     },

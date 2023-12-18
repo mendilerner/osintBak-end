@@ -1,6 +1,7 @@
 import { handleError } from "../../utils/handleErrors";
 import { Request, Response } from "express";
 import biDal from "./bi.dal";
+import { getOrSetCache, getOrSetCacheWithArgument } from "../../dataAccess/redisClient";
 
 export const handelBi = async (req: Request, res: Response) => {
   try {
@@ -13,16 +14,16 @@ export const handelBi = async (req: Request, res: Response) => {
 const biResolvers = {
   Query:{
     getCompletedOrders: async () => {
-      const OrdersPerDate = await biDal.getOrdersByDateExecution()
+      const OrdersPerDate = await getOrSetCache("completedOrders",biDal.getOrdersByDateExecution)
       return OrdersPerDate
     },
     getProfitsAndRevenue: async () => {
-      const profitsAndRevenue = await biDal.getProfitsPerMonth()
+      const profitsAndRevenue = await getOrSetCache("ProfitsAndRevenue", biDal.getProfitsPerMonth)
       return profitsAndRevenue
     },
     getTopProducts: async(parent: any,{ month }: { month: number }) => {
       const _month: number = Number(month) || new Date().getMonth()
-      const topProfitableProductForMonth = await biDal.getTopProfitableProducts(_month)
+      const topProfitableProductForMonth = await getOrSetCacheWithArgument("TopProducts", biDal.getTopProfitableProducts, _month)
       return topProfitableProductForMonth
     }
   }
