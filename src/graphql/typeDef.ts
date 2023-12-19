@@ -15,6 +15,10 @@ import biTypeDefs, { biQueryTypeDefs } from '../modules/bi/bi.typeDefs';
       ${usersMutationTypeDefs}
       ${ordersMutationTypeDefs}
     }
+
+    type Subscription {
+      completedOrders: [CompletedOrders]
+  }
      `;
   
   export default typeDefs;

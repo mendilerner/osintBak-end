@@ -3,8 +3,16 @@ import redis, {
   getOrSetCache,
   getOrSetCacheWithArgument,
 } from "../../dataAccess/redisClient";
+import pubsub from "../../pubsub/pubsub";
+import biDal from "../bi/bi.dal";
 import ordersService from "./orders.service";
 import { OrderInterface } from "./ordersInterface";
+
+const publishData = async (data:[], key: string) => {
+  pubsub.publish(key, { [key]: data });
+  await redis.set(key, JSON.stringify(data));
+  return data;
+};
 const ordersResolvers = {
   Query: {
     getAllOrders: async (
@@ -59,10 +67,20 @@ const ordersResolvers = {
         throw new Error("Problem with the put the order");
       } else {
         redis.del(["orders","ProfitsAndRevenue","completedOrders","TopProducts",`ordersOf{${id}}`]);
+        const completedOrders = await biDal.getOrdersByDateExecution()
+        pubsub.publish("completedOrders", { completedOrders: completedOrders });
+        await redis.set("completedOrders", JSON.stringify(completedOrders));
         return updatedOrderFromDB;
       }
     },
   },
+  Subscription: {
+    completedOrders: {
+      subscribe: () => {
+        return pubsub.asyncIterator("completedOrders");
+      },
+    },
+  }
 };
 
 export default ordersResolvers;

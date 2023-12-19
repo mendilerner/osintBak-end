@@ -9,7 +9,10 @@ const resolvers = {
   Mutation:{
     ...usersResolvers.Mutation,
     ...ordersResolvers.Mutation
-  }
+  },
+  Subscription: {
+    ...ordersResolvers.Subscription
+},
 };
 
 export default resolvers;
