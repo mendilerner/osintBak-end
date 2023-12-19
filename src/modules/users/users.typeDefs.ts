@@ -21,11 +21,15 @@ const typeDefs = `#graphql
   type UserLoggedResponse{
     access_token: String
   }
-`
 
+  type SendEmailToJoinResponse{
+    message: String
+  }
+`
 
 export const usersMutationTypeDefs = `#graphql  
   addUser(newUser: newUser): UserAddedResponse 
   loginUser(email: String!, password: String!): UserLoggedResponse
+  sendEmailToJoin(email: String!, userName: String!):SendEmailToJoinResponse
 `;
 export default typeDefs

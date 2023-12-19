@@ -2,11 +2,10 @@ import auth from "../../auth/authFunction";
 import { generateAuthToken } from "../../auth/jwt";
 import loginValidation from "./users.validators/loginValidation";
 import registerValidation from "./users.validators/registerValidation";
-import { login, register } from "./users.service";
+import { login, register, sendEmailToJoin } from "./users.service";
 import UserInterface from "./UserInterface";
 
 const resolvers = {
-
   Mutation: {
     addUser: async (
       parent: any,
@@ -35,7 +34,15 @@ const resolvers = {
       });
       return { access_token: token };
     },
-  },
+    sendEmailToJoin: async (
+      parent: any,
+      { email, userName }: { email: string; userName: string }
+    ) => {
+      const success = await sendEmailToJoin(email, userName);
+      if (success) return { message: "mail sended successfully" };
+    },
+  }
+
 };
 
 export default resolvers;
