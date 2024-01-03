@@ -2,6 +2,7 @@ import { handleError } from "../../utils/handleErrors";
 import { Request, Response } from "express";
 import biDal from "./bi.dal";
 import { getOrSetCache, getOrSetCacheWithArgument } from "../../dataAccess/redisClient";
+import pubsub from "../../pubsub/pubsub";
 
 export const handelBi = async (req: Request, res: Response) => {
   try {
@@ -26,6 +27,24 @@ const biResolvers = {
       const topProfitableProductForMonth = await getOrSetCacheWithArgument("TopProducts", biDal.getTopProfitableProducts, _month)
       return topProfitableProductForMonth
     }
+  },
+  Subscription: {
+    topProducts: {
+      subscribe: () => {
+        return pubsub.asyncIterator("topProducts");
+      },
+    },
+    profitsAndRevenue: {
+      subscribe: () => {
+        return pubsub.asyncIterator("profitsAndRevenue");
+      },
+    },
+    completedOrders: {
+        subscribe: () => {
+          return pubsub.asyncIterator("completedOrders");
+        },
+      },
+    
   }
 }
 

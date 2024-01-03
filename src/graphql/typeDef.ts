@@ -18,6 +18,8 @@ import biTypeDefs, { biQueryTypeDefs } from '../modules/bi/bi.typeDefs';
 
     type Subscription {
       completedOrders: [CompletedOrders]
+      topProducts: [TopProducts]
+      profitsAndRevenue: [ProfitsAndRevenue]
   }
      `;
   

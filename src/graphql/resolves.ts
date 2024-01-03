@@ -11,7 +11,7 @@ const resolvers = {
     ...ordersResolvers.Mutation
   },
   Subscription: {
-    ...ordersResolvers.Subscription
+    ...biResolvers.Subscription
 },
 };
 

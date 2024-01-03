@@ -49,6 +49,8 @@ const ordersResolvers = {
       if (!newOrder) {
         throw new Error("can't post Order ");
       } else {
+        const profitsAndRevenue = await biDal.getProfitsPerMonth()
+        pubsub.publish("profitsAndRevenue", { profitsAndRevenue: profitsAndRevenue });
         redis.del(["orders","ProfitsAndRevenue","completedOrders","TopProducts"]);
         return newOrderFromDB;
       }
@@ -67,18 +69,16 @@ const ordersResolvers = {
         throw new Error("Problem with the put the order");
       } else {
         redis.del(["orders","ProfitsAndRevenue","completedOrders","TopProducts",`ordersOf{${id}}`]);
-        const completedOrders = await biDal.getOrdersByDateExecution()
-        pubsub.publish("completedOrders", { completedOrders: completedOrders });
-        await redis.set("completedOrders", JSON.stringify(completedOrders));
+        setTimeout(
+          async () => {
+            const completedOrders = await biDal.getOrdersByDateExecution()
+            pubsub.publish("completedOrders", { completedOrders: completedOrders });
+            await redis.set("completedOrders", JSON.stringify(completedOrders));
+          },5000
+        )
+     
         return updatedOrderFromDB;
       }
-    },
-  },
-  Subscription: {
-    completedOrders: {
-      subscribe: () => {
-        return pubsub.asyncIterator("completedOrders");
-      },
     },
   }
 };
