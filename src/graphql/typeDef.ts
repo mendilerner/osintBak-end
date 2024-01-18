@@ -1,25 +1,11 @@
-import userTypeDef, { usersMutationTypeDefs} from '../modules/users/users.typeDefs'
-import ordersTypeDefs , {ordersMutationTypeDefs, ordersQueryTypeDefs} from '../modules/orders/orders.typeDefs';
-import biTypeDefs, { biQueryTypeDefs } from '../modules/bi/bi.typeDefs';
+import newsTypeDefs, { newsQueryTypeDefs, newsSubscriptionTypeDefs } from '../modules/news/news.typeDefs';
   const typeDefs = `#graphql   
-  
-    ${userTypeDef}
-    ${ordersTypeDefs}
-    ${biTypeDefs}
+    ${newsTypeDefs}
     type Query{
-      ${ordersQueryTypeDefs}
-      ${biQueryTypeDefs}
+      ${newsQueryTypeDefs}
     } 
-
-    type Mutation{
-      ${usersMutationTypeDefs}
-      ${ordersMutationTypeDefs}
-    }
-
     type Subscription {
-      completedOrders: [CompletedOrders]
-      topProducts: [TopProducts]
-      profitsAndRevenue: [ProfitsAndRevenue]
+      ${newsSubscriptionTypeDefs}
   }
      `;
   

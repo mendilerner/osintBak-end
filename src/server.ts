@@ -13,8 +13,9 @@ import apolloLogger from "./logger/apolloLogger";
 import { useServer } from "graphql-ws/lib/use/ws";
 import { WebSocketServer } from "ws";
 import { makeExecutableSchema } from '@graphql-tools/schema';
+import { connectToRedis } from "./dataAccess/redisClient";
+import pool from "./dataAccess/postgresConnection";
 
-connectToMongoDB();
 
 const app = express();
 
@@ -44,7 +45,12 @@ const server = new ApolloServer<{token?: string}>({ schema,
   ] });
 
   
-server.start().then(() => {
+server.start()
+.then (async () => {
+  await connectToRedis();
+  await pool.connect();
+})
+.then(() => {
   app.use(
     "/graphql",
     cors<cors.CorsRequest>(),
