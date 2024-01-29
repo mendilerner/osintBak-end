@@ -13,7 +13,7 @@ const newsResolvers = {
   Subscription: {
     newOrUpdatedNews: {
         subscribe: () => {
-          return pubsub.asyncIterator("newOrUpdatednews");
+          return pubsub.asyncIterator("newOrUpdatedNews");
         },
       },
     

@@ -11,6 +11,7 @@ type News {
   rating: Int
   matchTo: String
   coordinates: [Float]
+  literalLocation: [String]
 }
 
 `
